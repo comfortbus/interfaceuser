@@ -1,0 +1,84 @@
+var myApp = angular.module('news',['angular-loading-bar']);
+
+myApp.controller('index', ['$scope',"$http", function($scope,$http) {
+  
+  $scope.parada = null;
+  $scope.cidade = null;
+  $scope.estado = null;
+  $scope.local = null;
+  $scope.noticias=[];
+  $scope.localizacao = function(){
+    $.toast('Buscando coordenadas atuais.', {sticky: false, type: 'info'}); 
+    var geolocation = navigator.geolocation;
+    //console.log(geolocation)
+    geolocation.getCurrentPosition(sucesso, erro);
+    function sucesso(posicao){
+      console.log(posicao)
+      var lat = posicao.coords.latitude;
+      var lon = posicao.coords.longitude;
+      console.log("Lat: "+lat+" Long: "+lon);
+      localizar(lat,lon);   
+                        
+    }
+    function erro(error){
+      $.toast('Erro ao identificar coordenadas atual!', {sticky: true, type: 'danger'});
+    }
+  }
+
+  function localizar(lat,lon){
+    console.log("http://maps.googleapis.com/maps/api/geocode/json?address="+lat+","+lon);
+    $http({
+      method: 'GET',
+      url:"http://maps.googleapis.com/maps/api/geocode/json?address="+lat+","+lon,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+      }).then(function successCallback(response) {
+        //console.log("Sem erro: "+response.data);
+        var listaEnderecos = response.data.results[1].address_components;
+        for (var i = 0; listaEnderecos.length > i; i++) {
+          if(listaEnderecos[i].types[0] == "administrative_area_level_2"){
+            $scope.cidade = listaEnderecos[i].long_name;
+          }
+
+          if(listaEnderecos[i].types[0] == "administrative_area_level_1"){
+            $scope.cidade = listaEnderecos[i].long_name;
+          }
+          
+        };
+        $scope.local = $scope.cidade+", "+$scope.estado;
+        getNoticias($scope.cidade,$scope.estado);
+         
+      }, function errorCallback(response) {
+          $.toast('Erro ao identificar localização atual.', {sticky: true, type: 'danger'});                
+      });
+  }
+
+  function selecionar(lat,lon){
+    console.log("http://200.238.105.143:85/public/recife/stops?lat="+lat+"&lon="+lon+"&meters=100");
+    $http({
+      method: 'GET',
+      url:"http://200.238.105.143:85/public/recife/stops?lat="+lat+"&lon="+lon+"&meters=100",
+      headers: {
+        'Content-Type': 'application/json'
+      }
+      }).then(function successCallback(response) {
+        //console.log("Sem erro: "+response.data);
+        var listaParadas = response.data;
+        for (var i = 0; listaParadas.length > i; i++) {
+          $scope.parada = listaParadas[i];
+        };
+      }, function errorCallback(response) {
+          $.toast('Erro ao identificar localização atual.', {sticky: true, type: 'danger'});                
+      });
+  }
+
+
+  function formatar_data(data){
+    var ano = data.slice(0,4);
+    var mes = data.slice(5,7);
+    var dia = data.slice(8,10);
+    var dataFinal = dia+"/"+mes+"/"+ano;
+    return dataFinal;
+  }
+}]);
