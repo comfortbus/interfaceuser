@@ -114,13 +114,16 @@ myApp.controller('index', ['$scope',"$http","$window", function($scope,$http,$wi
                   "line":estimativas[i].line,
                   "veiculo":estimativas[i].vehicle
                 }
-                listEst.push(obj);
+                if (obj.length)
+                  listEst.push(obj);
+                else
+                  tam--;
               };
                $scope.estimativas.push(listEst)
               console.log($scope.estimativas.length)
               console.log($scope.estimativas)
               if($scope.estimativas.length == tam){
-                listarVeiculos($scope.estimativas)
+               // listarVeiculos($scope.estimativas)
               }
               //console.log($scope.estimativas);
           },

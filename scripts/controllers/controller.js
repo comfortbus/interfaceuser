@@ -10,9 +10,13 @@ myApp.config(['$routeProvider', '$httpProvider','uiGmapGoogleMapApiProvider', fu
             templateUrl: 'view/home.html',
             controller: 'index' 
         }).
-        when('/previsao', {
-            templateUrl: 'view/previsao.html',
-            controller: 'previsao'
+        when('/eu', {
+            templateUrl: 'view/eu.html',
+            controller: 'index'
+        }).
+        when('/ela', {
+            templateUrl: 'view/ela.html',
+            controller: 'ela'
         }).
         otherwise({
             redirectTo: '/',
@@ -33,7 +37,6 @@ myApp.controller('index', ['$scope',"$http","$window", function($scope,$http,$wi
 
   var geolocation =$window.navigator.geolocation;
   geolocation.getCurrentPosition(sucesso1, erro1);
-
   function sucesso1(posicao){
     console.log(posicao)
     var lat = posicao.coords.latitude;
@@ -43,19 +46,18 @@ myApp.controller('index', ['$scope',"$http","$window", function($scope,$http,$wi
     console.log("Lat: "+lat+" Long: "+lon);
              
   }
-
   function erro1(error){
     //$.toast('Erro ao identificar coordenadas atual!', {sticky: true, type: 'danger'});
     console.log("Erro loc.")
-  }
+    }
 
-  $scope.previsao = function(){
-    window.location = "#/previsao"
-  }
-
-  $scope.ela = function(){
+    $scope.ela = function(){
     window.location = "#/ela"
+  }
 
+  $scope.eu = function(){
+    //$.toast('Buscando coordenadas atuais.', {sticky: false, type: 'info'}); 
+    window.location = "#/eu"
     if ($window.navigator && $window.navigator.geolocation) {
       var geolocation =$window.navigator.geolocation;
       geolocation.getCurrentPosition(sucesso, erro);
@@ -132,12 +134,10 @@ myApp.controller('index', ['$scope',"$http","$window", function($scope,$http,$wi
   }
 }]);
 
-myApp.controller('previsao', ['$scope',"$http","$window", function($scope,$http,$window) {
-
+myApp.controller('ela', ['$scope',"$http","$window", function($scope,$http,$window) {
   var lat = window.sessionStorage.getItem('lat')
   var lon = window.sessionStorage.getItem('lon')
   $scope.map = { center: { latitude: lat, longitude: lon }, zoom: 14, id:'1' };
-
     $scope.enviar = function(){
       if ($window.navigator && $window.navigator.geolocation) {
         var geolocation =$window.navigator.geolocation;
@@ -226,45 +226,6 @@ myApp.controller('previsao', ['$scope',"$http","$window", function($scope,$http,
       }
     };
 /*
-    function listarLinhasParadaEscolhida(){
-      var cond = "true";
-     //console.log(lista)
-          console.log("http://200.238.105.143:85/public/recife/stop/"+$scope.parada+"/estimations");
-          $http({
-            method: 'GET',
-            url:"https://cors-anywhere.herokuapp.com/http://200.238.105.143:85/public/recife/stop/"+$scope.parada+"/estimations",
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          }).then(function successCallback(response) {
-              var listaParadasEscolhidas = response.data;
-              console.log(listaParadasEscolhidas);
-              for( var y = 0; lista.length > y ; y ++){
-                if(cond == "true"){
-                for (var j = 0; listaParadasEscolhidas.stops.length > j; j++) {
-                  console.log(listaParadasEscolhidas.stops[j].label + "??" + lista[y])
-                    if (listaParadasEscolhidas.stops[j].label == lista[y]){
-                        var obj = {
-                            "lat" : listaParadasEscolhidas.stops[j].location.lat,
-                            "lon" : listaParadasEscolhidas.stops[j].location.lon
-                        }
-                        console.log(obj)
-                        cond = "false"
-                        enviabanco(obj);
-
-                        break;
-                      }
-                    }
-                  }else{
-                    break;
-                  }
-                };
-              }, 
-          function errorCallback(response) {
-            //$.toast('Erro ao identificar localização atual.', {sticky: true, type: 'danger'});                
-          });
-        }
-
 		
 		var connection = new ActiveXObject("ADODB.Connection") ;
 

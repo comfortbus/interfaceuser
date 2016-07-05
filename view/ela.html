@@ -1,6 +1,6 @@
 <section class="content ng-scope">
     <div class="box box-warning">
-        <div class="box-header with-border">
+		<div class="box-header with-border">
           <h3 class="box-title"><b>Previsão</b></h3>
           <ui-gmap-google-map center='map.center' zoom='map.zoom'>
             <ui-gmap-marker coords="map.center" idKey="map.id"></ui-gmap-marker>
@@ -15,12 +15,15 @@
         <div class="box-body">
         	<div class="form-group">
                 <label>Número da Parada Origem</label>
-                <input ng-model="onibus" type="text" class="form-control" placeholder="Nº do Ônibus">
+                <input ng-model="onibus" type="text" class="form-control" placeholder="Nº Parada Org">
             </div>
             <div class="form-group">
                 <label>Número da Parada Destino</label>
-                <input ng-model="linha" type="text" class="form-control" placeholder="Nº da Linha">
+                <input ng-model="linha" type="text" class="form-control" placeholder="Nº Parada Dst">
             </div>
+            
+            <button ng-click="enviar()" type="button" class="btn btn-block btn-success btn-lg">Pesquisar</button>
+          
         </div>
         <!-- /.box-body -->
     </div>
