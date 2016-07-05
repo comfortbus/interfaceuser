@@ -161,10 +161,10 @@ myApp.controller('previsao', ['$scope',"$http","$window", function($scope,$http,
     }
 
     function listarveiculosParadaORG(){
-      console.log("http://200.238.105.143:85/public/recife/stop/PA19423/estimations");
+      console.log("http://comfortbus.herokuapp.com/api/parada/PA19423/estimativas/");
       $http({
         method: 'GET',
-        url:"https://cors-anywhere.herokuapp.com/http://200.238.105.143:85/public/recife/stop/PA19423/estimations",
+        url:"http://comfortbus.herokuapp.com/api/parada/PA19423/estimativas/",
         headers: {
           'Content-Type': 'application/json'
         }
@@ -173,8 +173,9 @@ myApp.controller('previsao', ['$scope',"$http","$window", function($scope,$http,
           var listvehiORG = [];
           for (var j = 0; listaveiculosORG.length > j; j++) {
             var obj = {
-               "tempodeestimativa":listaveiculosORG[j].arrivalTime,
-               "veiculo":listaveiculosORG[j].vehicle
+               "tempodeestimativa":listaveiculosORG[j].tempo_chegada,
+               "veiculo":listaveiculosORG[j].veiculo,
+               "lotacao":listaveiculosORG[j].lotacao
             }
             console.log(obj);
             listvehiORG.push(obj);
@@ -187,10 +188,10 @@ myApp.controller('previsao', ['$scope',"$http","$window", function($scope,$http,
     }
 
     function listarveiculosParadaDST(listvehiORG){
-      console.log("http://200.238.105.143:85/public/recife/stop/PA80011I/estimations");
+      console.log("http://comfortbus.herokuapp.com/api/parada/PA80011I/estimativas/");
       $http({
         method: 'GET',
-        url:"https://cors-anywhere.herokuapp.com/http://200.238.105.143:85/public/recife/stop/PA80011I/estimations",
+        url:"http://comfortbus.herokuapp.com/api/parada/PA80011I/estimativas/",
         headers: {
           'Content-Type': 'application/json'
         }
@@ -199,8 +200,9 @@ myApp.controller('previsao', ['$scope',"$http","$window", function($scope,$http,
           var listvehiDST = [];
           for (var j = 0; listaveiculosORG.length > j; j++) {
             var obj = {
-             "tempodeestimativa":listaveiculosDST[j].arrivalTime,
-             "veiculo":listaveiculosDST[j].vehicle
+             "tempodeestimativa":listaveiculosDST[j].tempo_chegada,
+             "veiculo":listaveiculosDST[j].veiculo,
+             "lotacao":listaveiculosDST[j].lotacao
             }
             console.log(obj);
             listvehiDST.push(obj);
@@ -220,6 +222,7 @@ myApp.controller('previsao', ['$scope',"$http","$window", function($scope,$http,
             var obj = {
                "veiculo":listvehiORG[i].veiculo,
                "tempodeestimativa":listvehiORG[i].tempodeestimativa,
+               "lotacao":listvehiORG[i].lotacao
             }
             console.log(obj);
             listvehi.push(obj);
